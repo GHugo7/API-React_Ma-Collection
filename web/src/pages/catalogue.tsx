@@ -1,10 +1,8 @@
-import { Link } from "react-router-dom";
-
-export default function Home() {
+export default function Catalogue() {
     return(
         <div className="">
             <ul>
-
+                
             </ul>
         </div>
     )
