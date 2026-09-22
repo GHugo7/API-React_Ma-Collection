@@ -1,8 +1,7 @@
 import { useState } from "react"
 import Button from "../components/ui/Button"
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import "../index.css"
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [ email, setEmail ] = useState("");
@@ -14,7 +13,6 @@ export default function Login() {
     const navigate = useNavigate();
 
     return(
-        <>
         <form onSubmit={async (e) => {
             e.preventDefault();
             setErreur(null);
@@ -30,16 +28,24 @@ export default function Login() {
         }}
         className="max-w-2xl mx-auto border rounded mt-10 p-8 flex flex-col items-center gap-3">
 
-            <label className="block mb-3 mt-3 mr-13">Nom ou email:
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border ml-2" required />
+        <h1 className="text-xl font-bold mb-5">Connexion</h1>
+            <label className="grid gap-1 w-72">Adresse mail :
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded px-2 py-1" required />
             </label>
-            <label className="block mb-3 ml-2.5 mr-14">Mot de passe:
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="border ml-2" required />
+            <label className="grid gap-1 w-72">Mot de passe :
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="border rounded px-2 py-1" required />
             </label>
-            <div className="ml-10">
-                <Button type="submit" variante="primaire" disabled={chargement}>{chargement ? "Connexion..." : "Se connecter"}</Button>
-            </div>
+
+            {erreur && 
+            <p role="alert" className="text-red-600 text-sm">{erreur}</p>}
+
+            <Button type="submit" variante="primaire" disabled={chargement}>
+                {chargement ? "Connexion..." : "Se connecter"}
+            </Button>
+
+            <p className="text-sm">
+                Pas de compte ? <Link to="/register" className="underline">S'inscrire</Link>
+            </p>
         </form>
-        </>
     )
 }
