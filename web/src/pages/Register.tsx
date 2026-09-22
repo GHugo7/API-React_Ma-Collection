@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import Button from "../components/ui/button";
+import Button from "../components/ui/Button";
 
 export default function Register() {
     const [ username, setUsername ] = useState("");

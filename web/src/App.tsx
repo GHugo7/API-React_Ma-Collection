@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import NotFound from './pages/notfound';
-import Register from "./pages/register";
-import Catalogue from "./pages/catalogue";
-import Navbar from "./pages/navbar";
-import Login from "./pages/login";
+import NotFound from './pages/NotFound';
+import Register from "./pages/Register";
+import Catalogue from "./pages/Catalogue";
+import Navbar from "./pages/layout/Navbar";
+import Login from "./pages/Login";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 
 export default function App() {
