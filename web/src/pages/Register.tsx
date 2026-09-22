@@ -17,17 +17,17 @@ export default function Register() {
 
     return(
         <>
-        <form onSubmit={submit} className="block w-full border rounded px-2 py-1">
-            <label className="block mb-3 mt-3 ml-18 md:mr-25">Nom:
+        <form onSubmit={submit} className="max-w-4xl mx-auto border rounded mt-10 p-8 flex flex-col items-center gap-3">
+            <label className="block mb-1 mt-3 ml-18 mr-12">Nom:
                 <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="border ml-2" required />
             </label>
-            <label className="block mb-3 mt-3 md:mr-25.5">Adresse e-mail:
+            <label className="block mb-3 mt-3 mr-12">Adresse e-mail:
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border ml-2" required />
             </label>
-            <label className="block mb-3 ml-2.5 mr-25.5">Mot de passe:
+            <label className="block mb-3 ml-2.5 mr-11.5">Mot de passe:
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="border ml-2" required />
             </label>
-            <label className="block mb-3 md:mr-48">Confirmer le mot de passe:
+            <label className="block mb-3 mr-34">Confirmer le mot de passe:
                 <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} aria-invalid={differents} className="border ml-2" required />
             </label>
             {differents && <p role="alert">Les mots de passes sont differents</p>}
