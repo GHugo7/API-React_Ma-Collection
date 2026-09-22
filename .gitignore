@@ -60,8 +60,8 @@ node_modules/
 !.yarn/releases
 
 # Builds front (CRA / Vite / Next)
-/frontend/build/
-/frontend/dist/
+/web/build/
+/web/dist/
 .next/
 out/
 .vite/
