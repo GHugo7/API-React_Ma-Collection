@@ -12,6 +12,7 @@ export default function App() {
     <Routes>
       <Route element={<Navbar />}>
         <Route path="/" element={<Catalogue />} />
+        <Route path="/collection" element={<Catalogue />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
