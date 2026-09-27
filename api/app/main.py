@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import engine
 from app.core.config import settings
 from app.models import Base
+from app.routers import items
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,7 +14,6 @@ async def lifespan(app: FastAPI):
     await engine.dispose()
 
 app = FastAPI(title="Ma Collection", lifespan=lifespan)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.cors_origin],
@@ -21,3 +21,4 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
+app.include_router(items.router)

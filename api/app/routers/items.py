@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
 from app.models.item import Item
-from app.schemas.item import ItemPage
+from app.schemas.item import ItemPage, ItemOut
 from app.dependencies.pagination import pagination
 
 router = APIRouter(prefix="/items", tags=["Catalogue"])
@@ -33,4 +33,16 @@ async def lister_get(
     requete = requete.offset((page - 1) * limit).limit(limit)
     items = (await session.execute(requete)).scalars().all()
 
-    return ItemPage(total=total, page=page, limit=limit, results=items)
+    return ItemPage(total=total, page=page, limit=limit, results=items) 
+
+@router.get("/{item_id}", response_model=ItemOut, summary="Fiche d'un item")
+async def get_item_by_id(item_id: int, session: AsyncSession = Depends(get_db)) -> Item:
+    item = await session.get(Item, item_id)
+
+    if item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Item introuvable"
+        )
+    
+    return item
