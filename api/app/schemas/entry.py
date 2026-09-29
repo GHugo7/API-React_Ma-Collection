@@ -5,6 +5,7 @@ from datetime import datetime
 from app.schemas.item import ItemOut
 
 Statut = Literal["a_decouvrir", "en_cours", "termine"]
+Tri = Literal["date", "note"]
 
 class EntryCreate(BaseModel):
     item_id: int
