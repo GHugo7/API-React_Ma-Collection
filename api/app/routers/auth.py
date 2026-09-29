@@ -8,6 +8,8 @@ from app.models.user import User
 from app.schemas.auth import UserOut, RegisterIn, TokenOut, LoginIn
 from app.dependencies.auth import get_current_user
 
+from app.schemas.error import ErrorOut
+
 router = APIRouter(prefix="/auth", tags=["Authentification"])
 
 
@@ -16,6 +18,7 @@ router = APIRouter(prefix="/auth", tags=["Authentification"])
     response_model=UserOut,
     status_code=status.HTTP_201_CREATED,
     summary="Créer un compte",
+    responses={409: {"model": ErrorOut, "description": "E-mail déjà utilisé"}}
 )
 async def register(
     data: RegisterIn,
@@ -39,7 +42,8 @@ async def register(
 @router.post(
     "/login",
     response_model=TokenOut,
-    summary="Connecter un compte"
+    summary="Connecter un compte",
+    responses={401: {"model": ErrorOut, "description": "Identifiants invalides"}}
 )
 async def login(data: LoginIn, session: AsyncSession = Depends(get_db)) -> TokenOut:
     user = await session.scalar(select(User).where(User.email == data.email))
@@ -52,6 +56,6 @@ async def login(data: LoginIn, session: AsyncSession = Depends(get_db)) -> Token
 
     return TokenOut(access_token=create_token(str(user.id)))
 
-@router.get("/me", response_model=UserOut, summary="Utilisateur courant")
+@router.get("/me", response_model=UserOut, summary="Utilisateur courant", responses={401: {"model": ErrorOut, "description": "Token invalide ou expiré"}})
 async def me(user: User = Depends(get_current_user)) -> User:
     return user

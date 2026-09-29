@@ -11,9 +11,16 @@ from app.models.entry import Entry
 from app.models.user import User
 from app.models.item import Item
 
+from app.schemas.error import ErrorOut
+
 router = APIRouter(prefix="/me", tags=["Collection"])
 
-@router.get("/collection", response_model=list[EntryOut], summary="Ma collection")
+@router.get(
+    "/collection", 
+    response_model=list[EntryOut], 
+    summary="Ma collection",
+    responses={401: {"model": ErrorOut, "description": "Non authentifié"}}
+)
 async def get_user_collection(
     statut: Statut | None = None,
     tri: Tri = "date",
@@ -31,7 +38,17 @@ async def get_user_collection(
 
     return list((await session.scalars(requete)).all())
 
-@router.post("/collection", response_model=EntryOut, status_code=status.HTTP_201_CREATED, summary="Ajouter un élément à ma collection")
+@router.post(
+    "/collection", 
+    response_model=EntryOut, 
+    status_code=status.HTTP_201_CREATED, 
+    summary="Ajouter un élément à ma collection",
+    responses={
+        401: {"model": ErrorOut, "description": "Non authentifié"},
+        404: {"model": ErrorOut, "description": "Item introuvable"},
+        409: {"model": ErrorOut, "description": "Déjà dans la collection"}
+    }
+)
 async def post_user_collection(
     data: EntryCreate,
     user: User = Depends(get_current_user),
@@ -60,7 +77,15 @@ async def post_user_collection(
     await session.refresh(entry)
     return entry
 
-@router.patch("/collection/{entry_id}", response_model=EntryOut, summary="Modifier un élément de votre collection")
+@router.patch(
+    "/collection/{entry_id}", 
+    response_model=EntryOut, 
+    summary="Modifier un élément de votre collection",
+    responses={
+        401: {"model": ErrorOut, "description": "Non authentifié"},
+        404: {"model": ErrorOut, "description": "Entrée introuvable"},
+    }
+)
 async def patch_user_collection(
     entry_id: int, 
     data: EntryUpdate, 
@@ -85,7 +110,15 @@ async def patch_user_collection(
     
     return entry
 
-@router.delete("/collection/{entry_id}",status_code=status.HTTP_204_NO_CONTENT, summary="Supprimer un élément de votre collection")
+@router.delete(
+    "/collection/{entry_id}",
+    status_code=status.HTTP_204_NO_CONTENT, 
+    summary="Supprimer un élément de votre collection",
+    responses={
+        401: {"model": ErrorOut, "description": "Non authentifié"},
+        404: {"model": ErrorOut, "description": "Entrée introuvable"}
+    }
+)
 async def delete_user_collection(
     entry_id: int,
     user: User = Depends(get_current_user),
@@ -104,7 +137,12 @@ async def delete_user_collection(
     await session.delete(entry)
     await session.commit()
 
-@router.get("/stats", response_model=StatsOut, summary="Affiche vos stats")
+@router.get(
+    "/stats", 
+    response_model=StatsOut, 
+    summary="Affiche vos stats",
+    responses={401: {"model": ErrorOut, "description": "Non authentifié"}}
+)
 async def get_user_stats(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db)

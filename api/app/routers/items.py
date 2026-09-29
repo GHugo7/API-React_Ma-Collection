@@ -7,6 +7,8 @@ from app.models.item import Item
 from app.schemas.item import ItemPage, ItemOut
 from app.dependencies.pagination import pagination
 
+from app.schemas.error import ErrorOut
+
 router = APIRouter(prefix="/items", tags=["Catalogue"])
 
 @router.get("", response_model=ItemPage, summary="Lister le catalogue")
@@ -35,7 +37,7 @@ async def lister_get(
 
     return ItemPage(total=total, page=page, limit=limit, results=items) 
 
-@router.get("/{item_id}", response_model=ItemOut, summary="Fiche d'un item")
+@router.get("/{item_id}", response_model=ItemOut, summary="Fiche d'un item", responses={404: {"model": ErrorOut, "description": "Item introuvable"}})
 async def get_item_by_id(item_id: int, session: AsyncSession = Depends(get_db)) -> Item:
     item = await session.get(Item, item_id)
 
