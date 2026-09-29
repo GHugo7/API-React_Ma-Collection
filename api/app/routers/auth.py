@@ -1,3 +1,5 @@
+"""Routes d'authentification."""
+
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,6 +26,9 @@ async def register(
     data: RegisterIn,
     session: AsyncSession = Depends(get_db)
 ) -> User:
+    """Crée un compte."""
+
+    # 1. vérifier que l'e-mail est libre
     existant = await session.scalar(select(User).where(User.email == data.email))
 
     if existant is not None:
@@ -31,8 +36,11 @@ async def register(
             status_code=status.HTTP_409_CONFLICT,
             detail="Cet e-mail est déjà utilisé"
         )
+
+    # 2. créer l'utilisateur avec le mot de passe haché
     user = User(email=data.email, hashed_password=hasher(data.password))
 
+    # 3. enregistrer en base
     session.add(user)
     await session.commit()
     await session.refresh(user)
@@ -46,8 +54,10 @@ async def register(
     responses={401: {"model": ErrorOut, "description": "Identifiants invalides"}}
 )
 async def login(data: LoginIn, session: AsyncSession = Depends(get_db)) -> TokenOut:
+    """Connecte l'utilisateur et renvoie un token."""
     user = await session.scalar(select(User).where(User.email == data.email))
 
+    # même message si l'e-mail ou le mot de passe est faux
     if user is None or not verifier(data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -58,4 +68,5 @@ async def login(data: LoginIn, session: AsyncSession = Depends(get_db)) -> Token
 
 @router.get("/me", response_model=UserOut, summary="Utilisateur courant", responses={401: {"model": ErrorOut, "description": "Token invalide ou expiré"}})
 async def me(user: User = Depends(get_current_user)) -> User:
+    """Renvoie l'utilisateur connecté."""
     return user

@@ -1,3 +1,5 @@
+"""Schémas de l'authentification."""
+
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 
 class RegisterIn(BaseModel):

@@ -1,3 +1,5 @@
+"""Routes de la collection de l'utilisateur connecté."""
+
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy import select, func
 from sqlalchemy.exc import IntegrityError
@@ -27,11 +29,16 @@ async def get_user_collection(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db)
 ) -> list[Entry]:
+    """Liste ma collection."""
+
+    # 1. seulement mes entrées
     requete = select(Entry).where(Entry.user_id == user.id)
 
+    # 2. filtrer par statut
     if statut:
         requete = requete.where(Entry.statut == statut)
 
+    # 3. trier
     requete = requete.order_by(
         Entry.note.desc() if tri == "note" else Entry.date_ajout.desc()
     )
@@ -54,6 +61,9 @@ async def post_user_collection(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db)
 ) -> Entry:
+    """Ajoute un jeu à ma collection."""
+
+    # 1. vérifier que l'item existe
     item = await session.get(Item, data.item_id)
 
     if item is None:
@@ -62,8 +72,10 @@ async def post_user_collection(
             detail="L'élément est introuvable"
         )
     
+    # 2. créer l'entrée
     entry = Entry(user_id=user.id, **data.model_dump())
 
+    # 3. enregistrer, 409 si déjà dans la collection
     try:
         session.add(entry)
         await session.commit()
@@ -92,6 +104,7 @@ async def patch_user_collection(
     user: User = Depends(get_current_user), 
     session: AsyncSession = Depends(get_db)
 ) -> Entry:
+    """Modifie une entrée de ma collection."""
     entry = await session.scalar(
         select(Entry).where(Entry.id == entry_id, Entry.user_id == user.id)
     )
@@ -102,6 +115,7 @@ async def patch_user_collection(
             detail="Entrée introuvable",
         )
 
+    # modifier seulement les champs envoyés
     for i, valeur in data.model_dump(exclude_unset=True).items():
         setattr(entry, i, valeur)
 
@@ -124,6 +138,7 @@ async def delete_user_collection(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db)
 ) -> None:
+    """Supprime une entrée de ma collection."""
     entry = await session.scalar(
         select(Entry).where(Entry.id == entry_id, Entry.user_id == user.id)
     )
@@ -147,14 +162,19 @@ async def get_user_stats(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db)
 ) -> StatsOut:
+    """Renvoie les statistiques de ma collection."""
+
+    # 1. nombre total
     total = await session.scalar(
         select(func.count()).select_from(Entry).where(Entry.user_id == user.id)
     )
 
+    # 2. note moyenne
     moyenne = await session.scalar(
         select(func.avg(Entry.note)).where(Entry.user_id == user.id)
     )
 
+    # 3. nombre par statut
     lignes = await session.execute(
         select(Entry.statut, func.count()).where(Entry.user_id == user.id)
         .group_by(Entry.statut)

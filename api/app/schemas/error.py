@@ -1,3 +1,5 @@
+"""Schémas du format d'erreur."""
+
 from pydantic import BaseModel
 
 class ErrorDetail(BaseModel):

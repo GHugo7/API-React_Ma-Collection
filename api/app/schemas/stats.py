@@ -1,3 +1,5 @@
+"""Schéma des statistiques."""
+
 from pydantic import BaseModel
 
 from app.schemas.entry import Statut

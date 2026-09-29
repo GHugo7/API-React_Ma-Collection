@@ -1,3 +1,5 @@
+"""Schémas du catalogue."""
+
 from pydantic import ConfigDict, BaseModel
 
 class ItemOut(BaseModel):

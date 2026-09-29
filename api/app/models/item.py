@@ -1,8 +1,11 @@
+"""Table du catalogue."""
+
 from app.models.base import Base
 from sqlalchemy import String, Text, ARRAY
 from sqlalchemy.orm import Mapped, mapped_column
 
 class Item(Base):
+    """Un jeu du catalogue."""
     __tablename__ = "items"
 
     id: Mapped[int] = mapped_column(primary_key=True)

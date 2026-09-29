@@ -1,3 +1,5 @@
+"""Génère data/items.json depuis Steam."""
+
 import requests
 import re
 import time
@@ -8,11 +10,13 @@ urlMostPlayed = "https://api.steampowered.com/ISteamChartsService/GetMostPlayedG
 EXCLUS = {"Free-to-play", "Utilitaires", "Accès anticipé", "Indépendant"}
 
 def get_appids() -> list[int]:
+    """Renvoie les ids des jeux les plus joués."""
     r = requests.get(urlMostPlayed)
     return [jeu["appid"] for jeu in r.json()["response"]["ranks"]]
 
 def extraire(data: dict) -> dict | None:
     # 1. Ecarter les DLC, logiciels, demos
+    """Convertit une fiche Steam en item, ou None."""
     if data.get("type") != "game":
         return None
 
@@ -45,6 +49,7 @@ def extraire(data: dict) -> dict | None:
     }
 
 def get_games(appid: int) -> dict | None:
+    """Télécharge la fiche d'un jeu."""
     url = f"https://store.steampowered.com/api/appdetails?appids={appid}&l=french"
     response = requests.get(url)
 
@@ -59,9 +64,12 @@ def get_games(appid: int) -> dict | None:
     return entree["data"]
 
 if __name__ == "__main__":
+
+    # 1. récupérer les jeux les plus joués
     appids = get_appids()
     items = []
 
+    # 2. télécharger et convertir chaque jeu
     for i, appid in enumerate(appids, 1):
         data = get_games(appid)
         if data:
@@ -69,8 +77,11 @@ if __name__ == "__main__":
             if item:
                 items.append(item)
         print(f"[{i}/{len(appids)}] {len(items)} items valides")
+
+        # pause pour ne pas être bloqué par Steam
         time.sleep(1)
 
+    # 3. écrire le fichier
     path = Path(__file__).parent.parent / "data" / "items.json"
     path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"{len(items)} items ecrits dams {path}")
+    print(f"{len(items)} items ecrits dans {path}")

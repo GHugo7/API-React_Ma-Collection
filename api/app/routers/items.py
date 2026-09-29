@@ -1,3 +1,5 @@
+"""Routes du catalogue."""
+
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,6 +20,7 @@ async def lister_get(
     page_limit: tuple[int, int] = Depends(pagination),
     session: AsyncSession = Depends(get_db),
     ) -> ItemPage:
+    """Liste le catalogue avec recherche, filtre et pagination."""
     page, limit = page_limit
 
     # 1. construire la requête avec les filtres
@@ -39,6 +42,7 @@ async def lister_get(
 
 @router.get("/{item_id}", response_model=ItemOut, summary="Fiche d'un item", responses={404: {"model": ErrorOut, "description": "Item introuvable"}})
 async def get_item_by_id(item_id: int, session: AsyncSession = Depends(get_db)) -> Item:
+    """Renvoie un jeu par son id."""
     item = await session.get(Item, item_id)
 
     if item is None:

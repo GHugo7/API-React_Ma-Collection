@@ -1,3 +1,5 @@
+"""Table des entrées de collection."""
+
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Text, UniqueConstraint, ForeignKey
 from datetime import datetime, timezone
@@ -5,7 +7,10 @@ from app.models.base import Base
 from app.models.item import Item
 
 class Entry(Base):
+    """Un jeu dans la collection d'un utilisateur."""
     __tablename__ = "collection_entries"
+
+    # un utilisateur ne peut pas ajouter deux fois le même item
     __table_args__ = (UniqueConstraint("user_id", "item_id", name="uq_user_item"),)
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -19,4 +24,5 @@ class Entry(Base):
         default=lambda: datetime.now(timezone.utc)
     )
 
+    # charge l'item avec l'entrée
     item: Mapped[Item] = relationship(lazy="selectin")

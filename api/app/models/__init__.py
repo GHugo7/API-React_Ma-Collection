@@ -1,3 +1,5 @@
+"""Modèles de la base de données."""
+
 from app.models.item import Item
 from app.models.base import Base
 from app.models.entry import Entry
