@@ -92,7 +92,7 @@ def get_games(appid: int) -> dict | None:
     return entree["data"]
 
 if __name__ == "__main__":
-    OBJECTIF = 20_000  # TEST : remettre 20_000
+    OBJECTIF = 20_000 
     path = Path(__file__).parent.parent / "data" / "items.json"
 
     # 1. reprendre là où on s'était arrêté
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     print(f"Reprise avec {len(items)} items")
 
     # 2. récupérer les appids
-    appids = get_appids(1)  # TEST : remettre get_appids()
+    appids = get_appids(22)  # TEST : remettre get_appids()
     print(f"{len(appids)} appids à parcourir")
 
     # 3. télécharger et convertir chaque jeu
