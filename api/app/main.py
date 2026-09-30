@@ -3,6 +3,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
+from collections.abc import AsyncGenerator
+
 from app.db.database import engine
 from app.core.config import settings
 from app.models import Base
@@ -10,7 +12,7 @@ from app.routers import items, auth, collection
 from app.core.exceptions import enregistrer_handlers
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Crée les tables au démarrage, ferme la connexion à l'arrêt."""
 
     # créer les tables si elles n'existent pas
