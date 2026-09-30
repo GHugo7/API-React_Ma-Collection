@@ -19,7 +19,7 @@ async def lister_get(
     categorie: str | None = None,
     page_limit: tuple[int, int] = Depends(pagination),
     session: AsyncSession = Depends(get_db),
-    ) -> ItemPage:
+) -> ItemPage:
     """Liste le catalogue avec recherche, filtre et pagination."""
     page, limit = page_limit
 
