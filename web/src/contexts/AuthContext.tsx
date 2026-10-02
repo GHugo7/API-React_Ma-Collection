@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { User } from "../types/api"
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import * as authService from "../services/authService.mock";
+import * as authService from "../services/authService";
 
 interface AuthContextValue {
     token: string | null,
