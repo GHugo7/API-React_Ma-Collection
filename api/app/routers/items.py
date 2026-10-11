@@ -35,7 +35,7 @@ async def lister_get(
     total = (await session.execute(total_req)).scalar_one()
 
     # 3. paginer puis exécuter
-    requete = requete.offset((page - 1) * limit).limit(limit)
+    requete = requete.order_by(Item.id).offset((page - 1) * limit).limit(limit)
     items = (await session.execute(requete)).scalars().all()
 
     return ItemPage(total=total, page=page, limit=limit, results=items) 

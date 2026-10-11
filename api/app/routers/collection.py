@@ -40,7 +40,7 @@ async def get_user_collection(
 
     # 3. trier
     requete = requete.order_by(
-        Entry.note.desc() if tri == "note" else Entry.date_ajout.desc()
+        Entry.note.desc().nulls_last() if tri == "note" else Entry.date_ajout.desc()
     )
 
     return list((await session.scalars(requete)).all())
@@ -83,7 +83,7 @@ async def post_user_collection(
         await session.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="L'élément est deja present dans votre collection"
+            detail="L'élément est déjà présent dans votre collection"
         )
 
     await session.refresh(entry)
