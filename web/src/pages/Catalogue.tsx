@@ -9,18 +9,22 @@ export default function Catalogue() {
 
     useEffect(() => {
         setLoad(true);
-        setError(false);
+        setError(null);
         lister(1, 12)
             .then(setData)
             .catch((e) => setError(e.message))
             .finally(() => setLoad(false));
     }, []);
 
+    if (load) return <p>Chargement...</p>;
+    if (error) return <p>{error}</p>;
+    if (!data || data.total === 0) return <p>Aucun jeu charge</p>;
+
     return(
-        <div className="">
-            <ul>
-                
-            </ul>   
-        </div>
+        <ul>
+            {data.results.map((item) => (
+                <li key={item.id}>{item.titre}</li>
+            ))}
+        </ul>
     )
 }
