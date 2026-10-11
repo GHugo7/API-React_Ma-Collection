@@ -1,3 +1,5 @@
+
+
 // ---------- Auth ----------
 export interface User {
   id: number;
@@ -14,4 +16,54 @@ export interface ApiErrorBody {
     code: number;
     message: string;
   };
+}
+
+export interface Item {
+  id: number;
+  titre: string;
+  categorie: string;
+  description: string;
+  image_url: string;
+  annee: number;
+  plateforme: string[];
+  studio: string;
+}
+
+export interface ItemPage {
+  total: number;
+  page: number;
+  limit: number;
+  results: Item[];
+}
+
+// ---------- Collection ----------
+export type Statut = "a_decouvrir" | "en_cours" | "termine";
+export type Tri = "date" | "note";
+
+export interface Entry {
+  id: number;
+  statut: Statut;
+  note: number | null;
+  commentaire: string | null;
+  date_ajout: string;
+  item: Item;
+}
+
+export interface EntryCreate {
+  item_id: number;
+  statut: Statut;
+  note?: number | null;
+  commentaire?: string | null;
+}
+
+export interface EntryUpdate {
+  statut?: Statut;
+  note?: number | null;
+  commentaire?: string | null;
+}
+
+export interface Stats {
+  total: number;
+  par_statut: Record<Statut, number>;
+  note_moyenne: number | null;
 }
