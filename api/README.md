@@ -201,7 +201,7 @@ docker compose up -d
 
 ## Le catalogue Steam
 
-`data/items.json` (environ 81 000 jeux, 38 Mo) est versionné : il n'est pas nécessaire de le régénérer. Il a été produit par `scripts/fetch_steam.py`, qui :
+`data/items.json` (81 164 jeux répartis en 27 catégories, 37 Mo) est versionné : il n'est pas nécessaire de le régénérer. Il a été produit par `scripts/fetch_steam.py`, qui :
 
 1. récupère la liste des appids sur l'API SteamSpy, une page de 1 000 par minute ;
 2. télécharge la fiche de chaque jeu sur l'API du Steam Store, en français, avec une requête toutes les 1,5 s et une pause de 60 s quand Steam renvoie `429` ;
@@ -211,7 +211,7 @@ docker compose up -d
 python scripts/fetch_steam.py
 ```
 
-Le script sauvegarde tous les 500 jeux et reprend là où il s'était arrêté grâce à `data/appids_vus.json` (non versionné). Un parcours complet prend plusieurs dizaines d'heures.
+Le script sauvegarde tous les 500 jeux et reprend là où il s'était arrêté grâce à `data/appids_vus.json` (non versionné). La collecte complète a pris 32 heures.
 
 ## Structure
 

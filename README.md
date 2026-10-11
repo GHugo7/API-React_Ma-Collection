@@ -28,7 +28,7 @@ Deux applications indépendantes dans un seul dépôt :
 
 ### Fonctionnalités
 
-- **Catalogue public** — grille de jeux issus de Steam, consultable sans compte
+- **Catalogue public** — grille de jeux issus de Steam, consultable sans compte, avec pagination et recherche par titre
 - **Comptes** — inscription, connexion, déconnexion, mots de passe hachés en Argon2
 - **Collection personnelle** — ajout depuis le catalogue, statut (à découvrir / en cours / terminé), note de 1 à 5, commentaire
 - **Filtre et tri** — par statut, par date d'ajout ou par note
@@ -112,27 +112,28 @@ L'interface est servie sur **http://localhost:5173**.
 ---
 
 ## Architecture
+
 ```
 .
 ├── api/
-│ ├── app/
-│ │ ├── core/ # configuration, sécurité (Argon2, JWT), format d’erreur
-│ │ ├── db/ # moteur async, session par requête
-│ │ ├── dependencies/ # utilisateur courant, pagination
-│ │ ├── models/ # tables SQLAlchemy
-│ │ ├── routers/ # auth, items, collection
-│ │ └── schemas/ # schémas Pydantic
-│ ├── data/items.json # catalogue Steam
-│ ├── scripts/ # collecte des données
-│ └── seed.py # import en base
+│   ├── app/
+│   │   ├── core/           # configuration, sécurité (Argon2, JWT), format d’erreur
+│   │   ├── db/             # moteur async, session par requête
+│   │   ├── dependencies/   # utilisateur courant, pagination
+│   │   ├── models/         # tables SQLAlchemy
+│   │   ├── routers/        # auth, items, collection
+│   │   └── schemas/        # schémas Pydantic
+│   ├── data/items.json     # catalogue Steam
+│   ├── scripts/            # collecte des données
+│   └── seed.py             # import en base
 └── web/src/
-├── components/ui/ # composants réutilisables
-├── contexts/ # AuthContext
-├── hooks/ # useLocalStorage (générique)
-├── pages/ # une page par route
-├── routes/ # routes protégées
-├── services/ # client HTTP unique + un service par domaine
-└── types/api.ts # types du contrat d’API, écrits à la main
+    ├── components/ui/      # composants réutilisables
+    ├── contexts/           # AuthContext
+    ├── hooks/              # useLocalStorage (générique)
+    ├── pages/              # une page par route
+    ├── routes/             # routes protégées
+    ├── services/           # client HTTP unique + un service par domaine
+    └── types/api.ts        # types du contrat d’API, écrits à la main
 ```
 
 Deux principes structurants :

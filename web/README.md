@@ -39,13 +39,13 @@ Vite lit le `.env` au démarrage : après une modification, relancer `npm run de
 
 | Route | Page | Accès |
 |---|---|---|
-| `/` | Catalogue : grille de jeux. Une fois connecté, le bouton « Ajouter » met le jeu dans la collection avec le statut « À découvrir ». | Public |
+| `/` | Catalogue : grille de 12 jeux par page, avec les boutons « Précédent » et « Suivant ». Le champ de recherche filtre par titre à partir de 2 caractères et revient à la page 1. Une fois connecté, le bouton « Ajouter » met le jeu dans la collection avec le statut « À découvrir ». | Public |
 | `/register` | Création de compte (mot de passe de 8 caractères minimum, avec confirmation). Redirige vers `/login`. | Public |
 | `/login` | Connexion. Redirige vers `/collection`. | Public |
 | `/collection` | Ma collection, avec filtre par statut et tri par date d'ajout ou par note. | Connecté |
 | autre | Page 404 | Public |
 
-Toutes les pages partagent la barre de navigation (`pages/layout/Navbar.tsx`), qui affiche les liens de connexion et d'inscription, ou le bouton de déconnexion quand l'utilisateur est connecté.
+Toutes les pages partagent la barre de navigation (`pages/layout/Navbar.tsx`), qui affiche les liens de connexion et d'inscription, ou, quand l'utilisateur est connecté, le lien « Mon profil » (vers `/collection`) et le bouton de déconnexion.
 
 ## Authentification
 
