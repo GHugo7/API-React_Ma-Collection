@@ -21,10 +21,16 @@ export default function Catalogue() {
     if (!data || data.total === 0) return <p>Aucun jeu charge</p>;
 
     return(
-        <ul>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {data.results.map((item) => (
-                <li key={item.id}>{item.titre}</li>
+                <article key={item.id} className="border rounded overflow-hidden">
+                    <img src={item.image_url} alt={item.titre} className="w-full" />
+                    <div className="p-2">
+                        <h2 className="font-bold truncate">{item.titre}</h2>
+                        <p className="text-sm text-gray-600">{item.categorie} - {item.annee}</p>
+                    </div>
+                </article>
             ))}
-        </ul>
+        </div>
     )
 }
