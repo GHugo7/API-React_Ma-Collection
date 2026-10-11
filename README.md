@@ -7,6 +7,12 @@ Le projet est séparé en deux dossiers, chacun avec son propre README détaill�
 - [`api/`](api/README.md) — API REST en FastAPI (authentification JWT, catalogue, collection, statistiques)
 - [`web/`](web/README.md) — Front en React, qui consomme l'API
 
+## Prérequis
+
+- Python 3.12 ou plus
+- Node.js 20.19+ ou 22.12+
+- Docker et Docker Compose
+
 ## Démarrage rapide
 
 Les deux parties doivent tourner en parallèle, chacune dans son terminal.
@@ -15,6 +21,8 @@ Les deux parties doivent tourner en parallèle, chacune dans son terminal.
 # 1. l'API : PostgreSQL, dépendances, puis lancement — voir api/README.md
 cd api
 cp .env.example .env
+# renseigner DATABASE_URL et SECRET_KEY dans .env (voir api/README.md)
+# clé : python -c "import secrets; print(secrets.token_hex(32))"
 docker compose up -d
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
