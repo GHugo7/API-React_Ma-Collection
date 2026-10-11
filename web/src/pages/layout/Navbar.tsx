@@ -12,7 +12,7 @@ export default function Navbar() {
                 <Link to="/" className="font-bold">Ma Collection</Link>
                 {user ? 
                     <>
-                        <Link to="/me" className="ml-auto">Mon profil</Link>
+                        <Link to="/collection" className="ml-auto">Mon profil</Link>
                         <Button onClick={logout}>Se deconnecter</Button>
                     </>
                     : 
