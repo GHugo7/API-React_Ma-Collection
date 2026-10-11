@@ -22,7 +22,7 @@ cp .env.example .env
 
 Dans `.env`, remplacer les placeholders de `DATABASE_URL` par les valeurs `POSTGRES_*`. Avec les valeurs par défaut :
 
-```
+```env
 DATABASE_URL=postgresql+psycopg://macollection:macollection@localhost:5432/macollection
 ```
 
