@@ -27,13 +27,13 @@ export default function Catalogue() {
     useEffect(() => {
         setLoad(true);
         setError(null);
-        lister(page, 12)
+        lister(page, 12, q.length >= 2 ? q : undefined)
             .then(setData)
             .catch((e) => setError(e.message))
             .finally(() => setLoad(false));
-    }, [page]);
+    }, [page, q]);
 
-    if (load) return <p>Chargement...</p>;
+    if (load && !data) return <p>Chargement...</p>;
     if (error) return <p>{error}</p>;
     if (!data || data.total === 0) return <p>Aucun jeu trouvé</p>;
 
@@ -41,6 +41,13 @@ export default function Catalogue() {
 
     return(
     <>
+    <input
+        type="search"
+        value={q}
+        onChange={(e) => { setQ(e.target.value); setPage(1); }}
+        placeholder="Rechercher un jeu…"
+        className="mb-4 w-full rounded-lg border px-4 py-2"
+    />
     {message && (
         <p className="mb-4 rounded-lg bg-green-50 border border-green-300 px-4 py-2 text-green-800">{message}</p>
     )}
