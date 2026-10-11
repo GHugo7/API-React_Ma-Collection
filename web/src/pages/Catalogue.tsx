@@ -37,7 +37,9 @@ export default function Catalogue() {
 
     return(
         <>
-        <p className="mb-4 rounded-lg bg-green-50 border border-green-300 px-4 py-2 text-green-800">{message && <p>{message}</p>}</p>
+        {message && (
+            <p className="mb-4 rounded-lg bg-green-50 border border-green-300 px-4 py-2 text-green-800">{message}</p>
+        )}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {data.results.map((item) => (
                 <article key={item.id} className="border rounded overflow-hidden">
